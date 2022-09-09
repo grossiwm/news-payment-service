@@ -23,6 +23,7 @@ public class PaymentService {
             log.info("About to process Payment " + payment.id);
             Calendar calendar = Calendar.getInstance();
             payment.processedDate = calendar;
+            payment.creditCardDetails = null;
             TimeUnit.SECONDS.sleep(2);
             log.info("Payment " + payment.id + " processed");
             return objectMapper.writeValueAsString(payment);
