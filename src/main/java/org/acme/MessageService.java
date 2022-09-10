@@ -40,8 +40,6 @@ public class MessageService {
         try {
             // create a connection
             ConnectionFactory connectionFactory = new ConnectionFactory();
-            connectionFactory.setHost("localhost");
-            connectionFactory.setPort(5672);
             Connection connection = connectionFactory.newConnection();
             // create a channel
             channel = connection.createChannel();
