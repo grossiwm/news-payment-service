@@ -22,8 +22,7 @@ jobs:
       - name: Build with Maven
         run: |
           ./mvnw package
-          cd target
-          tar -czvf tarball.tar.gz ./quarkus-app
+          tar -czvf tarball.tar.gz ./target/quarkus-app
       - name: Upload tarball
         uses: actions/upload-artifact@v3
         with:
@@ -43,7 +42,7 @@ jobs:
       - name: untar and move to docker dir
         run: |
           tar -xvzf tarball.tar.gz
-          mv quarkus-app ./docker
+          mv ./target/quarkus-app ./docker
           cd docker
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }}
