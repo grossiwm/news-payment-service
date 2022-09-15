@@ -10,19 +10,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  native_build:
     runs-on: ubuntu-latest
-
+    name: Build native Quarkus app
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
-      - name: Build native executable
+      - name: Checkout the code
+        uses: actions/checkout@master
+      - name: Build native executable and upload it as an artifact
         uses: maxday/quarkus-native-build-docker-action@1
-        with:
-          outputName: app-runner
-      - name: Upload native executable
-        uses: actions/upload-artifact@v1
-        with:
-          name: native-executable
-          path: app-runner
+          outputName: myApp-runner
