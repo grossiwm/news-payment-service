@@ -12,7 +12,6 @@ on:
 jobs:
   native_build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -25,5 +24,28 @@ jobs:
       - name: Upload executable
         uses: actions/upload-artifact@v3
         with:
-          name: project_jar
+          name: project_executable
           path: ${{ github.workspace }}/target/payment-service-1.0.0-SNAPSHOT-runner
+  docker:
+    runs-on: ubuntu-18.04
+    needs: [ native_build ]
+    env:
+      REPO: ${{ secrets.DOCKER_REPO }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Download jar
+        uses: actions/download-artifact@v3
+        with:
+          name: project_executable
+          path: ${{ github.workspace }}/docker
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }}
+          -p ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Docker image
+        run: |
+          cd docker
+          docker build --build-arg DD_API_KEY=${{ secrets.DATADOG_API_KEY }} -t $REPO:latest -t $REPO:${GITHUB_SHA::8} .
+      - name: Publish Docker image with commit sha tag
+        run: docker push $REPO:${GITHUB_SHA::8}
+      - name: Publish Docker image with tag latest
+        run: docker push $REPO:latest
