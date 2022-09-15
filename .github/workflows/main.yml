@@ -33,7 +33,7 @@ jobs:
       REPO: ${{ secrets.DOCKER_REPO }}
     steps:
       - uses: actions/checkout@v1
-      - name: Download jar
+      - name: Download executable
         uses: actions/download-artifact@v3
         with:
           name: project_executable
