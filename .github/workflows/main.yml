@@ -22,7 +22,7 @@ jobs:
       - name: Build with Maven
         run: |
           ./mvnw package
-          tar -czvf tarball.tar.gz ./target/quarkus-app
+          tar -czvf tarball.tar.gz ./target
       - name: Upload tarball
         uses: actions/upload-artifact@v3
         with:
