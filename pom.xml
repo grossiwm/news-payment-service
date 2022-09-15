@@ -57,6 +57,12 @@
         <artifactId>quarkus-jackson</artifactId>
         <version>2.12.1.Final</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/io.quarkiverse.opentracing.datadog/quarkus-datadog-opentracing -->
+    <dependency>
+        <groupId>io.quarkiverse.opentracing.datadog</groupId>
+        <artifactId>quarkus-datadog-opentracing</artifactId>
+        <version>1.1.6</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
