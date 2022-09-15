@@ -1,13 +1,12 @@
-FROM debian
+FROM openjdk:17-jdk-slim
 
 ARG DD_API_KEY
 
 RUN apt-get -y update && apt-get -y install curl
 RUN DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=${DD_API_KEY} DD_SITE="datadoghq.com" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
 RUN mkdir /var/app
-ADD ./payment-service-1.0.0-SNAPSHOT-runner /var/app
-RUN chmod +x /var/app/payment-service-1.0.0-SNAPSHOT-runner
-RUN curl -L https://dtdg.co/latest-java-tracer --output /var/app/dd-java-agent.jar
+ADD ./quarkus-app /var/quarkus-app
+RUN curl -L https://dtdg.co/latest-java-tracer --output /var/dd-java-agent.jar
 ADD ./entrypoint.sh /opt/startup.sh
 RUN chmod +x /opt/startup.sh
 

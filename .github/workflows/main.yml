@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  native_build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,15 +20,17 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
       - name: Build with Maven
-        run: ./mvnw package -Pnative
-      - name: Upload executable
+        run: |
+          ./mvnw package
+          tar -czvf tarball.tar.gz ./target/quarkus-app
+      - name: Upload tarball
         uses: actions/upload-artifact@v3
         with:
-          name: project_executable
-          path: ${{ github.workspace }}/target/payment-service-1.0.0-SNAPSHOT-runner
+          name: tarball
+          path: ${{ github.workspace }}/tarball.tar.gz
   docker:
     runs-on: ubuntu-18.04
-    needs: [ native_build ]
+    needs: [ build ]
     env:
       REPO: ${{ secrets.DOCKER_REPO }}
     steps:
@@ -36,8 +38,12 @@ jobs:
       - name: Download executable
         uses: actions/download-artifact@v3
         with:
-          name: project_executable
-          path: ${{ github.workspace }}/docker
+          name: tarball
+      - name: untar and move to docker dir
+      - run: |
+          tar -xvzf tarball.tar.gz
+          mv quarkus-app ./docker
+          cd docker
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }}
           -p ${{ secrets.DOCKERHUB_TOKEN }}

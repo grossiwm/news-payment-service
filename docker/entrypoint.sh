@@ -1,3 +1,4 @@
 service datadog-agent start
 
-/var/app/payment-service-1.0.0-SNAPSHOT-runner
+java -javaagent:/var/dd-java-agent.jar -Ddd.service=news-payment-service \
+-Ddd.env=prod -Ddd.logs.injection=true -jar /var/quarkus-app/quarkus-run.jar
