@@ -40,7 +40,7 @@ jobs:
         with:
           name: tarball
       - name: untar and move to docker dir
-      - run: |
+        run: |
           tar -xvzf tarball.tar.gz
           mv quarkus-app ./docker
           cd docker
