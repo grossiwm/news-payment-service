@@ -8,6 +8,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -22,6 +24,18 @@ import io.vertx.core.impl.logging.LoggerFactory;
 
 @ApplicationScoped
 public class MessageService {
+
+    @ConfigProperty(name = "quarkus.rabbitmqclient.hostname")
+    String host;
+
+    @ConfigProperty(name = "quarkus.rabbitmqclient.port")
+    String port;
+
+    @ConfigProperty(name = "quarkus.rabbitmqclient.username")
+    String username;
+
+    @ConfigProperty(name = "quarkus.rabbitmqclient.password")
+    String passwd;
 
     @Inject
     PaymentService paymentService;
@@ -40,6 +54,9 @@ public class MessageService {
         try {
             // create a connection
             ConnectionFactory connectionFactory = new ConnectionFactory();
+            connectionFactory.setHost(host);
+            connectionFactory.setUsername(username);
+            connectionFactory.setPassword(passwd);
             Connection connection = connectionFactory.newConnection();
             // create a channel
             channel = connection.createChannel();
