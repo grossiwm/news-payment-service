@@ -5,4 +5,5 @@ export RABBIT_PASSWORD=$RABBIT_PASSWORD
 export RABBIT_HOST=$RABBIT_HOST          
 export RABBIT_PORT=$RABBIT_PORT      
 
-java -jar /var/quarkus-app/quarkus-run.jar
+java -Ddd.service=news-payment-service \
+-Ddd.env=prod -Ddd.logs.injection=true -jar /var/quarkus-app/quarkus-run.jar
